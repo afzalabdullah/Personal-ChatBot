@@ -1,4 +1,3 @@
-# libraries
 import random
 import numpy as np
 import pickle
@@ -8,6 +7,9 @@ from keras.models import load_model
 from nltk.stem import WordNetLemmatizer
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import Flask-CORS
+
+# Ensure NLTK data is available
+nltk.download('punkt')
 
 lemmatizer = WordNetLemmatizer()
 
