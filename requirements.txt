@@ -1,6 +1,7 @@
 flask
 numpy
 nltk
+nltk_data
 tensorflow
 flask-cors
 gunicorn
