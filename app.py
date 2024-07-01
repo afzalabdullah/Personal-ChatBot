@@ -10,6 +10,7 @@ from flask_cors import CORS  # Import Flask-CORS
 
 # Ensure NLTK data is available
 nltk.download('punkt')
+nltk.download('wordnet')  # Download wordnet corpus
 
 lemmatizer = WordNetLemmatizer()
 
