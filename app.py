@@ -14,7 +14,7 @@ nltk.download('wordnet')  # Download wordnet corpus
 
 lemmatizer = WordNetLemmatizer()
 
-# chat initialization
+# Load model and data
 model = load_model("chatbot_model.h5")
 intents = json.loads(open("intents.json").read())
 words = pickle.load(open("words.pkl", "rb"))
@@ -23,31 +23,26 @@ classes = pickle.load(open("classes.pkl", "rb"))
 app = Flask(__name__)
 CORS(app)  # Enable CORS for your Flask app
 
-@app.route("/get", methods=["POST"])
+@app.route("/", methods=["POST"])
 def chatbot_response():
     data = request.get_json()
     msg = data['msg']
     
-    if msg.startswith('my name is'):
-        name = msg[11:]
-        ints = predict_class(msg, model)
-        res1 = getResponse(ints, intents)
-        res = res1.replace("{n}", name)
-    elif msg.startswith('hi my name is'):
-        name = msg[14:]
+    if msg.startswith('my name is') or msg.startswith('hi my name is'):
+        name = msg.split('is', 1)[1].strip()
         ints = predict_class(msg, model)
         res1 = getResponse(ints, intents)
         res = res1.replace("{n}", name)
     else:
         ints = predict_class(msg, model)
-        if not ints:  # Check if ints is empty
+        if not ints:
             res = "I'm sorry, I didn't understand that."
         else:
             res = getResponse(ints, intents)
     
     return jsonify({"response": res})
 
-# chat functionalities
+# Chat functionalities
 def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
@@ -76,9 +71,9 @@ def predict_class(sentence, model):
 def getResponse(ints, intents_json):
     tag = ints[0]["intent"]
     list_of_intents = intents_json["intents"]
-    for i in list_of_intents:
-        if i["tag"] == tag:
-            result = random.choice(i["responses"])
+    for intent in list_of_intents:
+        if intent["tag"] == tag:
+            result = random.choice(intent["responses"])
             break
     return result
 
