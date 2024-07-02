@@ -23,7 +23,7 @@ classes = pickle.load(open("classes.pkl", "rb"))
 app = Flask(__name__)
 CORS(app)  # Enable CORS for your Flask app
 
-@app.route("/", methods=["POST"])
+@app.route("/get", methods=["POST"])
 def chatbot_response():
     data = request.get_json()
     msg = data['msg']
@@ -79,3 +79,5 @@ def getResponse(ints, intents_json):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
